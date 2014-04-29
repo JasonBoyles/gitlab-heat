@@ -123,9 +123,23 @@ resources:
       image: { get_param: image }
       key_name: { get_resource: ssh_key }
 
-  gitlab_setup:
+  gitlab_presetup:
     type: "OS::Heat::ChefSolo"
     depends_on: gitlab_server
+    properties:
+      username: root
+      private_key: { get_attr: [ssh_key, private_key] }
+      host: { get_attr: [gitlab_server, accessIPv4] }
+      kitchen: { get_param: kitchen }
+      chef_version: { get_param: chef_version }
+      node:
+        run_list:
+          - recipe[apt]
+          - recipe[build-essential]
+
+  gitlab_setup:
+    type: "OS::Heat::ChefSolo"
+    depends_on: gitlab_presetup
     properties:
       username: root
       private_key: { get_attr: [ssh_key, private_key] }
@@ -149,13 +163,13 @@ resources:
           servers:
             - address: 127.0.0.1
               port: 6379
-        run_list: [ "recipe[apt]",
-                    "recipe[mysql::server]",
-                    "recipe[dotmy-cnf]",
-                    "recipe[postfix::server]",
-                    "recipe[gitlab]",
-                    "recipe[gitlab::firewall]",
-                    "recipe[gitlab-http-redirect]"]
+        run_list:
+          - recipe[mysql::server]
+          - recipe[dotmy-cnf]
+          - recipe[postfix::server]
+          - recipe[rax-gitlab::default]
+          - recipe[rax-gitlab::firewall]
+          - recipe[gitlab-http-redirect]
 
 
 outputs:
