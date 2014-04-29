@@ -178,3 +178,9 @@ outputs:
 
   server_ip:
     value: { get_attr: [gitlab_server, accessIPv4] }
+
+  gitlab_admin_user:
+    value: { get_param: gitlab_admin_user }
+
+  gitlab_admin_password:
+    value: { get_attr: [gitlab_admin_password, value] }
