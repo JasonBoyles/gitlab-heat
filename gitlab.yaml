@@ -77,7 +77,6 @@ parameters:
     type: string
     default: root
 
-
 resources:
 
   ssh_key:
@@ -143,16 +142,13 @@ resources:
           https: true
           self_signed_cert: true
         mysql:
-          server_debian_password: { get_attr: [mysql_debian_password, value] },
-          server_repl_password: { get_attr: [mysql_repl_password, value] },
+          server_debian_password: { get_attr: [mysql_debian_password, value] }
+          server_repl_password: { get_attr: [mysql_repl_password, value] }
           server_root_password: { get_attr: [mysql_root_password, value] }
         redisio:
           servers:
             - address: 127.0.0.1
               port: 6379
-        rax:
-          firewall:
-            tcp: [ { get_param: gitlab_server_port } ]
         run_list: [ "recipe[apt]",
                     "recipe[mysql::server]",
                     "recipe[dotmy-cnf]",
@@ -168,6 +164,3 @@ outputs:
 
   server_ip:
     value: { get_attr: [gitlab_server, accessIPv4] }
-
-  server_port:
-    value: { get_param: gitlab_server_port }
