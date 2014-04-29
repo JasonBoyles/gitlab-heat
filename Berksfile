@@ -9,7 +9,8 @@ cookbook 'build-essential',
   :git => 'https://github.com/opscode-cookbooks/build-essential.git'
 
 cookbook 'mysql',
-  :git => 'https://github.com/opscode-cookbooks/mysql.git'
+  :git => 'https://github.com/opscode-cookbooks/mysql.git',
+  :ref => 'd9c657f8e84a3d517514f9e7f618ea279cb9b84d'
 
 cookbook 'nginx', '= 2.0.8'
 
